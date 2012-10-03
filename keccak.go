@@ -176,7 +176,7 @@ func (k *keccak) pad(block []byte) []byte {
 
 	copy(padded, k.buf)
 	padded[len(k.buf)] = 0x01
-	padded[len(padded)-1] = 0x80
+	padded[len(padded)-1] |= 0x80
 
 	return padded
 }

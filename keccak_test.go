@@ -124,8 +124,7 @@ func TestKeccak(t *testing.T) {
 }
 
 type testcase struct {
-	length int
-	msg []byte
+	msg    []byte
 	output []byte
 }
 
@@ -135,7 +134,7 @@ func TestKeccakShort224(t *testing.T) {
 		h.Write(tstShort224[i].msg)
 		d := h.Sum(nil)
 		if !bytes.Equal(d, tstShort224[i].output) {
-			t.Errorf("testcase Short224 %d: expected %x got %x", i, tests[i].output, d)
+			t.Errorf("testcase Short224 %d: expected %x got %x", i, tstShort224[i].output, d)
 		}
 	}
 }
@@ -146,7 +145,7 @@ func TestKeccakShort256(t *testing.T) {
 		h.Write(tstShort256[i].msg)
 		d := h.Sum(nil)
 		if !bytes.Equal(d, tstShort256[i].output) {
-			t.Errorf("testcase Short256 %d: expected %x got %x", i, tests[i].output, d)
+			t.Errorf("testcase Short256 %d: expected %x got %x", i, tstShort256[i].output, d)
 		}
 	}
 }
@@ -157,7 +156,7 @@ func TestKeccakShort384(t *testing.T) {
 		h.Write(tstShort384[i].msg)
 		d := h.Sum(nil)
 		if !bytes.Equal(d, tstShort384[i].output) {
-			t.Errorf("testcase Short384 %d: expected %x got %x", i, tests[i].output, d)
+			t.Errorf("testcase Short384 %d: expected %x got %x", i, tstShort384[i].output, d)
 		}
 	}
 }
@@ -168,7 +167,51 @@ func TestKeccakShort512(t *testing.T) {
 		h.Write(tstShort512[i].msg)
 		d := h.Sum(nil)
 		if !bytes.Equal(d, tstShort512[i].output) {
-			t.Errorf("testcase Short512 %d: expected %x got %x", i, tests[i].output, d)
+			t.Errorf("testcase Short512 %d: expected %x got %x", i, tstShort512[i].output, d)
+		}
+	}
+}
+
+func TestKeccakLong224(t *testing.T) {
+	for i := range tstLong224 {
+		h := New224()
+		h.Write(tstLong224[i].msg)
+		d := h.Sum(nil)
+		if !bytes.Equal(d, tstLong224[i].output) {
+			t.Errorf("testcase Long224 %d: expected %x got %x", i, tstLong224[i].output, d)
+		}
+	}
+}
+
+func TestKeccakLong256(t *testing.T) {
+	for i := range tstLong256 {
+		h := New256()
+		h.Write(tstLong256[i].msg)
+		d := h.Sum(nil)
+		if !bytes.Equal(d, tstLong256[i].output) {
+			t.Errorf("testcase Long256 %d: expected %x got %x", i, tstLong256[i].output, d)
+		}
+	}
+}
+
+func TestKeccakLong384(t *testing.T) {
+	for i := range tstLong384 {
+		h := New384()
+		h.Write(tstLong384[i].msg)
+		d := h.Sum(nil)
+		if !bytes.Equal(d, tstLong384[i].output) {
+			t.Errorf("testcase Long384 %d: expected %x got %x", i, tstLong384[i].output, d)
+		}
+	}
+}
+
+func TestKeccakLong512(t *testing.T) {
+	for i := range tstLong512 {
+		h := New512()
+		h.Write(tstLong512[i].msg)
+		d := h.Sum(nil)
+		if !bytes.Equal(d, tstLong512[i].output) {
+			t.Errorf("testcase Long512 %d: expected %x got %x", i, tstLong512[i].output, d)
 		}
 	}
 }

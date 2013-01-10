@@ -1,3 +1,5 @@
+// Package keccak implements the Keccak (SHA-3) hash algorithm.
+// http://keccak.noekeon.org.
 package keccak
 
 import (

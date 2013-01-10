@@ -1,7 +1,6 @@
 package keccak
 
 import (
-	"encoding/binary"
 	"hash"
 )
 
@@ -102,7 +101,7 @@ func (k0 *keccak) Sum(b []byte) []byte {
 
 	buf := make([]byte, len(k.S)*8)
 	for i := range k.S {
-		binary.LittleEndian.PutUint64(buf[i*8:], k.S[i])
+		putUint64le(buf[i*8:], k.S[i])
 	}
 	return append(b, buf[:k.size]...)
 }
@@ -129,7 +128,7 @@ func (k *keccak) f(block []byte) {
 	}
 
 	for i := 0; i < k.blockSize/8; i++ {
-		k.S[i] ^= binary.LittleEndian.Uint64(block[i*8:])
+		k.S[i] ^= uint64le(block[i*8:])
 	}
 
 	for r := 0; r < rounds; r++ {
@@ -183,4 +182,27 @@ func (k *keccak) pad(block []byte) []byte {
 
 func rotl64(x uint64, n uint) uint64 {
 	return (x << n) | (x >> (64 - n))
+}
+
+func uint64le(v []byte) uint64 {
+	return uint64(v[0]) |
+		uint64(v[1])<<8 |
+		uint64(v[2])<<16 |
+		uint64(v[3])<<24 |
+		uint64(v[4])<<32 |
+		uint64(v[5])<<40 |
+		uint64(v[6])<<48 |
+		uint64(v[7])<<56
+
+}
+
+func putUint64le(v []byte, x uint64) {
+	v[0] = byte(x)
+	v[1] = byte(x >> 8)
+	v[2] = byte(x >> 16)
+	v[3] = byte(x >> 24)
+	v[4] = byte(x >> 32)
+	v[5] = byte(x >> 40)
+	v[6] = byte(x >> 48)
+	v[7] = byte(x >> 56)
 }

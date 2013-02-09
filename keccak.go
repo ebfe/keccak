@@ -126,7 +126,7 @@ func (k *keccak) BlockSize() int {
 func (k *keccak) f(block []byte) {
 
 	if len(block) != k.blockSize {
-		panic("write() called with invalid block size")
+		panic("f() called with invalid block size")
 	}
 
 	for i := 0; i < k.blockSize/8; i++ {

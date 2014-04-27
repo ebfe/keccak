@@ -6,6 +6,12 @@ import (
 	"hash"
 )
 
+const (
+	domainNone = 1
+	domainSHA3 = 0x06
+	domainSHAKE = 0x1f
+)
+
 const rounds = 24
 
 var roundConstants = []uint64{
@@ -40,29 +46,31 @@ type keccak struct {
 	size      int
 	blockSize int
 	buf       []byte
+	domain    byte
 }
 
-func newKeccak(bitlen int) hash.Hash {
+func newKeccak(bitlen int, domain byte) hash.Hash {
 	var h keccak
 	h.size = bitlen / 8
 	h.blockSize = (200 - 2*h.size)
+	h.domain = domain
 	return &h
 }
 
 func New224() hash.Hash {
-	return newKeccak(224)
+	return newKeccak(224, domainNone)
 }
 
 func New256() hash.Hash {
-	return newKeccak(256)
+	return newKeccak(256, domainNone)
 }
 
 func New384() hash.Hash {
-	return newKeccak(384)
+	return newKeccak(384, domainNone)
 }
 
 func New512() hash.Hash {
-	return newKeccak(512)
+	return newKeccak(512, domainNone)
 }
 
 func (k *keccak) Write(b []byte) (int, error) {
@@ -176,7 +184,7 @@ func (k *keccak) pad(block []byte) []byte {
 	padded := make([]byte, k.blockSize)
 
 	copy(padded, k.buf)
-	padded[len(k.buf)] = 0x01
+	padded[len(k.buf)] = k.domain
 	padded[len(padded)-1] |= 0x80
 
 	return padded

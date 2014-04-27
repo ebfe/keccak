@@ -7,8 +7,8 @@ import (
 )
 
 const (
-	domainNone = 1
-	domainSHA3 = 0x06
+	domainNone  = 1
+	domainSHA3  = 0x06
 	domainSHAKE = 0x1f
 )
 

@@ -48,4 +48,3 @@ func TestSHA3512(t *testing.T) {
 		}
 	}
 }
-

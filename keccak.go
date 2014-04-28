@@ -169,7 +169,7 @@ func (k *keccak) squeeze(b []byte) []byte {
 }
 
 func keccakf(S *[25]uint64) {
-	var bc[5]uint64
+	var bc [5]uint64
 	var tmp, tmp2 uint64
 
 	for r := 0; r < rounds; r++ {

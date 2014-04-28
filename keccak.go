@@ -49,28 +49,28 @@ type keccak struct {
 	domain    byte
 }
 
-func newKeccak(bitlen int, domain byte) hash.Hash {
+func newKeccak(capacity, output int, domain byte) hash.Hash {
 	var h keccak
-	h.size = bitlen / 8
-	h.blockSize = (200 - 2*h.size)
+	h.size = output / 8
+	h.blockSize = (200 - capacity/8)
 	h.domain = domain
 	return &h
 }
 
 func New224() hash.Hash {
-	return newKeccak(224, domainNone)
+	return newKeccak(224*2, 224, domainNone)
 }
 
 func New256() hash.Hash {
-	return newKeccak(256, domainNone)
+	return newKeccak(256*2, 256, domainNone)
 }
 
 func New384() hash.Hash {
-	return newKeccak(384, domainNone)
+	return newKeccak(384*2, 384, domainNone)
 }
 
 func New512() hash.Hash {
-	return newKeccak(512, domainNone)
+	return newKeccak(512*2, 512, domainNone)
 }
 
 func (k *keccak) Write(b []byte) (int, error) {

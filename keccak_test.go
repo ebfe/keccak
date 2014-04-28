@@ -240,3 +240,25 @@ func TestSmallWrites(t *testing.T) {
 		t.Errorf("testcase small writes: expected %x got %x", tc.output512, d)
 	}
 }
+
+func benchmarkHash(b *testing.B, h hash.Hash) {
+	m := make([]byte, 4096)
+	h.Reset()
+	b.SetBytes(int64(len(m)))
+	b.ReportAllocs()
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		h.Write(m)
+	}
+}
+
+func Benchmark224(b *testing.B)      { benchmarkHash(b, New224()) }
+func Benchmark256(b *testing.B)      { benchmarkHash(b, New256()) }
+func Benchmark384(b *testing.B)      { benchmarkHash(b, New384()) }
+func Benchmark512(b *testing.B)      { benchmarkHash(b, New512()) }
+func BenchmarkSHA3224(b *testing.B)  { benchmarkHash(b, NewSHA3224()) }
+func BenchmarkSHA3256(b *testing.B)  { benchmarkHash(b, NewSHA3256()) }
+func BenchmarkSHA3384(b *testing.B)  { benchmarkHash(b, NewSHA3384()) }
+func BenchmarkSHA3512(b *testing.B)  { benchmarkHash(b, NewSHA3512()) }
+func BenchmarkSHAKE128(b *testing.B) { benchmarkHash(b, NewSHAKE128(256)) }
+func BenchmarkSHAKE256(b *testing.B) { benchmarkHash(b, NewSHAKE256(256)) }

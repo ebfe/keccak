@@ -1,5 +1,5 @@
 // Package keccak implements the Keccak (SHA-3) hash algorithm.
-// http://keccak.noekeon.org.
+// http://keccak.noekeon.org / FIPS 202 draft.
 package keccak
 
 import (

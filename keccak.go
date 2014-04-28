@@ -88,12 +88,12 @@ func (k *keccak) Write(b []byte) (int, error) {
 			return n, nil
 		}
 
-		k.f(k.buf)
+		k.absorb(k.buf)
 		k.buf = nil
 	}
 
 	for len(b) >= k.blockSize {
-		k.f(b[:k.blockSize])
+		k.absorb(b[:k.blockSize])
 		b = b[k.blockSize:]
 	}
 
@@ -103,17 +103,9 @@ func (k *keccak) Write(b []byte) (int, error) {
 }
 
 func (k0 *keccak) Sum(b []byte) []byte {
-
 	k := *k0
-
-	last := k.pad(k.buf)
-	k.f(last)
-
-	buf := make([]byte, len(k.S)*8)
-	for i := range k.S {
-		putUint64le(buf[i*8:], k.S[i])
-	}
-	return append(b, buf[:k.size]...)
+	k.final()
+	return k.squeeze(b)
 }
 
 func (k *keccak) Reset() {
@@ -131,16 +123,7 @@ func (k *keccak) BlockSize() int {
 	return k.blockSize
 }
 
-func (k *keccak) f(block []byte) {
-
-	if len(block) != k.blockSize {
-		panic("f() called with invalid block size")
-	}
-
-	for i := 0; i < k.blockSize/8; i++ {
-		k.S[i] ^= uint64le(block[i*8:])
-	}
-
+func (k *keccak) f() {
 	for r := 0; r < rounds; r++ {
 		var bc [5]uint64
 
@@ -179,6 +162,17 @@ func (k *keccak) f(block []byte) {
 	}
 }
 
+func (k *keccak) absorb(block []byte) {
+	if len(block) != k.blockSize {
+		panic("absorb() called with invalid block size")
+	}
+
+	for i := 0; i < k.blockSize/8; i++ {
+		k.S[i] ^= uint64le(block[i*8:])
+	}
+	k.f()
+}
+
 func (k *keccak) pad(block []byte) []byte {
 
 	padded := make([]byte, k.blockSize)
@@ -188,6 +182,29 @@ func (k *keccak) pad(block []byte) []byte {
 	padded[len(padded)-1] |= 0x80
 
 	return padded
+}
+
+func (k *keccak) final() {
+	last := k.pad(k.buf)
+	k.absorb(last)
+}
+
+func (k *keccak) squeeze(b []byte) []byte {
+	buf := make([]byte, 8*len(k.S))
+	n := k.size
+	for {
+		for i := range k.S {
+			putUint64le(buf[i*8:], k.S[i])
+		}
+		if n <= k.blockSize {
+			b = append(b, buf[:n]...)
+			break
+		}
+		b = append(b, buf[:k.blockSize]...)
+		n -= k.blockSize
+		k.f()
+	}
+	return b
 }
 
 func rotl64(x uint64, n uint) uint64 {

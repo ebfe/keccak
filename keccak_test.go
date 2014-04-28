@@ -132,8 +132,9 @@ type testcase struct {
 }
 
 func TestKeccakShort224(t *testing.T) {
+	h := New224()
 	for i := range tstShort {
-		h := New224()
+		h.Reset()
 		h.Write(tstShort[i].msg)
 		d := h.Sum(nil)
 		if !bytes.Equal(d, tstShort[i].output224) {
@@ -143,8 +144,9 @@ func TestKeccakShort224(t *testing.T) {
 }
 
 func TestKeccakShort256(t *testing.T) {
+	h := New256()
 	for i := range tstShort {
-		h := New256()
+		h.Reset()
 		h.Write(tstShort[i].msg)
 		d := h.Sum(nil)
 		if !bytes.Equal(d, tstShort[i].output256) {
@@ -154,8 +156,9 @@ func TestKeccakShort256(t *testing.T) {
 }
 
 func TestKeccakShort384(t *testing.T) {
+	h := New384()
 	for i := range tstShort {
-		h := New384()
+		h.Reset()
 		h.Write(tstShort[i].msg)
 		d := h.Sum(nil)
 		if !bytes.Equal(d, tstShort[i].output384) {
@@ -165,8 +168,9 @@ func TestKeccakShort384(t *testing.T) {
 }
 
 func TestKeccakShort512(t *testing.T) {
+	h := New512()
 	for i := range tstShort {
-		h := New512()
+		h.Reset()
 		h.Write(tstShort[i].msg)
 		d := h.Sum(nil)
 		if !bytes.Equal(d, tstShort[i].output512) {
@@ -176,8 +180,9 @@ func TestKeccakShort512(t *testing.T) {
 }
 
 func TestKeccakLong224(t *testing.T) {
+	h := New224()
 	for i := range tstLong {
-		h := New224()
+		h.Reset()
 		h.Write(tstLong[i].msg)
 		d := h.Sum(nil)
 		if !bytes.Equal(d, tstLong[i].output224) {
@@ -187,8 +192,9 @@ func TestKeccakLong224(t *testing.T) {
 }
 
 func TestKeccakLong256(t *testing.T) {
+	h := New256()
 	for i := range tstLong {
-		h := New256()
+		h.Reset()
 		h.Write(tstLong[i].msg)
 		d := h.Sum(nil)
 		if !bytes.Equal(d, tstLong[i].output256) {
@@ -198,8 +204,9 @@ func TestKeccakLong256(t *testing.T) {
 }
 
 func TestKeccakLong384(t *testing.T) {
+	h := New384()
 	for i := range tstLong {
-		h := New384()
+		h.Reset()
 		h.Write(tstLong[i].msg)
 		d := h.Sum(nil)
 		if !bytes.Equal(d, tstLong[i].output384) {
@@ -209,12 +216,27 @@ func TestKeccakLong384(t *testing.T) {
 }
 
 func TestKeccakLong512(t *testing.T) {
+	h := New512()
 	for i := range tstLong {
-		h := New512()
+		h.Reset()
 		h.Write(tstLong[i].msg)
 		d := h.Sum(nil)
 		if !bytes.Equal(d, tstLong[i].output512) {
 			t.Errorf("testcase Long512 %d: expected %x got %x", i, tstLong[i].output512, d)
 		}
+	}
+}
+
+func TestSmallWrites(t *testing.T) {
+	h := New512()
+	tc := tstLong[len(tstLong)-1]
+
+	for i := 0; i < len(tc.msg); i++ {
+		h.Write(tc.msg[i : i+1])
+	}
+
+	d := h.Sum(nil)
+	if !bytes.Equal(d, tc.output512) {
+		t.Errorf("testcase small writes: expected %x got %x", tc.output512, d)
 	}
 }

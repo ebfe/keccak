@@ -6,8 +6,9 @@ import (
 )
 
 func TestSHA3224(t *testing.T) {
+	h := NewSHA3224()
 	for i := range tstShort {
-		h := NewSHA3224()
+		h.Reset()
 		h.Write(sha3tests[i].msg)
 		d := h.Sum(nil)
 		if !bytes.Equal(d, sha3tests[i].output224) {
@@ -17,8 +18,9 @@ func TestSHA3224(t *testing.T) {
 }
 
 func TestSHA3256(t *testing.T) {
+	h := NewSHA3256()
 	for i := range sha3tests {
-		h := NewSHA3256()
+		h.Reset()
 		h.Write(sha3tests[i].msg)
 		d := h.Sum(nil)
 		if !bytes.Equal(d, sha3tests[i].output256) {
@@ -28,8 +30,9 @@ func TestSHA3256(t *testing.T) {
 }
 
 func TestSHA3384(t *testing.T) {
+	h := NewSHA3384()
 	for i := range sha3tests {
-		h := NewSHA3384()
+		h.Reset()
 		h.Write(sha3tests[i].msg)
 		d := h.Sum(nil)
 		if !bytes.Equal(d, sha3tests[i].output384) {
@@ -39,8 +42,9 @@ func TestSHA3384(t *testing.T) {
 }
 
 func TestSHA3512(t *testing.T) {
+	h := NewSHA3512()
 	for i := range sha3tests {
-		h := NewSHA3512()
+		h.Reset()
 		h.Write(sha3tests[i].msg)
 		d := h.Sum(nil)
 		if !bytes.Equal(d, sha3tests[i].output512) {

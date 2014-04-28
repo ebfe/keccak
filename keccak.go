@@ -172,14 +172,18 @@ func keccakf(S *[25]uint64) {
 	var bc [5]uint64
 	for r := 0; r < rounds; r++ {
 		// theta
-		for i := range bc {
-			bc[i] = S[i] ^ S[5+i] ^ S[10+i] ^ S[15+i] ^ S[20+i]
-		}
+		bc[0] = S[0] ^ S[5+0] ^ S[10+0] ^ S[15+0] ^ S[20+0]
+		bc[1] = S[1] ^ S[5+1] ^ S[10+1] ^ S[15+1] ^ S[20+1]
+		bc[2] = S[2] ^ S[5+2] ^ S[10+2] ^ S[15+2] ^ S[20+2]
+		bc[3] = S[3] ^ S[5+3] ^ S[10+3] ^ S[15+3] ^ S[20+3]
+		bc[4] = S[4] ^ S[5+4] ^ S[10+4] ^ S[15+4] ^ S[20+4]
 		for i := range bc {
 			t := bc[(i+4)%5] ^ rotl64(bc[(i+1)%5], 1)
-			for j := 0; j < len(S); j += 5 {
-				S[i+j] ^= t
-			}
+			S[i+0] ^= t
+			S[i+5] ^= t
+			S[i+10] ^= t
+			S[i+15] ^= t
+			S[i+20] ^= t
 		}
 
 		// rho phi
@@ -193,12 +197,16 @@ func keccakf(S *[25]uint64) {
 
 		// chi
 		for j := 0; j < len(S); j += 5 {
-			for i := range bc {
-				bc[i] = S[j+i]
-			}
-			for i := range bc {
-				S[j+i] ^= (^bc[(i+1)%5]) & bc[(i+2)%5]
-			}
+			bc[0] = S[j+0]
+			bc[1] = S[j+1]
+			bc[2] = S[j+2]
+			bc[3] = S[j+3]
+			bc[4] = S[j+4]
+			S[j+0] ^= (^bc[(0+1)%5]) & bc[(0+2)%5]
+			S[j+1] ^= (^bc[(1+1)%5]) & bc[(1+2)%5]
+			S[j+2] ^= (^bc[(2+1)%5]) & bc[(2+2)%5]
+			S[j+3] ^= (^bc[(3+1)%5]) & bc[(3+2)%5]
+			S[j+4] ^= (^bc[(4+1)%5]) & bc[(4+2)%5]
 		}
 
 		// iota

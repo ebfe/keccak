@@ -123,45 +123,6 @@ func (k *keccak) BlockSize() int {
 	return k.blockSize
 }
 
-func (k *keccak) f() {
-	for r := 0; r < rounds; r++ {
-		var bc [5]uint64
-
-		// theta
-		for i := range bc {
-			bc[i] = k.S[i] ^ k.S[5+i] ^ k.S[10+i] ^ k.S[15+i] ^ k.S[20+i]
-		}
-		for i := range bc {
-			t := bc[(i+4)%5] ^ rotl64(bc[(i+1)%5], 1)
-			for j := 0; j < len(k.S); j += 5 {
-				k.S[i+j] ^= t
-			}
-		}
-
-		// rho phi
-		temp := k.S[1]
-		for i := range piLane {
-			j := piLane[i]
-			temp2 := k.S[j]
-			k.S[j] = rotl64(temp, rotationConstants[i])
-			temp = temp2
-		}
-
-		// chi
-		for j := 0; j < len(k.S); j += 5 {
-			for i := range bc {
-				bc[i] = k.S[j+i]
-			}
-			for i := range bc {
-				k.S[j+i] ^= (^bc[(i+1)%5]) & bc[(i+2)%5]
-			}
-		}
-
-		// iota
-		k.S[0] ^= roundConstants[r]
-	}
-}
-
 func (k *keccak) absorb(block []byte) {
 	if len(block) != k.blockSize {
 		panic("absorb() called with invalid block size")
@@ -170,7 +131,7 @@ func (k *keccak) absorb(block []byte) {
 	for i := 0; i < k.blockSize/8; i++ {
 		k.S[i] ^= uint64le(block[i*8:])
 	}
-	k.f()
+	keccakf(&k.S)
 }
 
 func (k *keccak) pad(block []byte) []byte {
@@ -202,9 +163,47 @@ func (k *keccak) squeeze(b []byte) []byte {
 		}
 		b = append(b, buf[:k.blockSize]...)
 		n -= k.blockSize
-		k.f()
+		keccakf(&k.S)
 	}
 	return b
+}
+
+func keccakf(S *[25]uint64) {
+	var bc [5]uint64
+	for r := 0; r < rounds; r++ {
+		// theta
+		for i := range bc {
+			bc[i] = S[i] ^ S[5+i] ^ S[10+i] ^ S[15+i] ^ S[20+i]
+		}
+		for i := range bc {
+			t := bc[(i+4)%5] ^ rotl64(bc[(i+1)%5], 1)
+			for j := 0; j < len(S); j += 5 {
+				S[i+j] ^= t
+			}
+		}
+
+		// rho phi
+		temp := S[1]
+		for i := range piLane {
+			j := piLane[i]
+			temp2 := S[j]
+			S[j] = rotl64(temp, rotationConstants[i])
+			temp = temp2
+		}
+
+		// chi
+		for j := 0; j < len(S); j += 5 {
+			for i := range bc {
+				bc[i] = S[j+i]
+			}
+			for i := range bc {
+				S[j+i] ^= (^bc[(i+1)%5]) & bc[(i+2)%5]
+			}
+		}
+
+		// iota
+		S[0] ^= roundConstants[r]
+	}
 }
 
 func rotl64(x uint64, n uint) uint64 {

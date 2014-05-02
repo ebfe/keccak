@@ -157,129 +157,146 @@ func (k *keccak) squeeze(b []byte) []byte {
 }
 
 func keccakf(S *[25]uint64) {
-	var bc [5]uint64
+	var bc0, bc1, bc2, bc3, bc4 uint64
+	var S0, S1, S2, S3, S4 uint64
+	var S5, S6, S7, S8, S9 uint64
+	var S10, S11, S12, S13, S14 uint64
+	var S15, S16, S17, S18, S19 uint64
+	var S20, S21, S22, S23, S24 uint64
 	var tmp uint64
+
+	S0, S1, S2, S3, S4 = S[0], S[1], S[2], S[3], S[4]
+	S5, S6, S7, S8, S9 = S[5], S[6], S[7], S[8], S[9]
+	S10, S11, S12, S13, S14 = S[10], S[11], S[12], S[13], S[14]
+	S15, S16, S17, S18, S19 = S[15], S[16], S[17], S[18], S[19]
+	S20, S21, S22, S23, S24 = S[20], S[21], S[22], S[23], S[24]
 
 	for r := 0; r < rounds; r++ {
 		// theta
-		bc[0] = S[0] ^ S[5] ^ S[10] ^ S[15] ^ S[20]
-		bc[1] = S[1] ^ S[6] ^ S[11] ^ S[16] ^ S[21]
-		bc[2] = S[2] ^ S[7] ^ S[12] ^ S[17] ^ S[22]
-		bc[3] = S[3] ^ S[8] ^ S[13] ^ S[18] ^ S[23]
-		bc[4] = S[4] ^ S[9] ^ S[14] ^ S[19] ^ S[24]
-		tmp = bc[4] ^ (bc[1]<<1 | bc[1]>>(64-1))
-		S[0] ^= tmp
-		S[5] ^= tmp
-		S[10] ^= tmp
-		S[15] ^= tmp
-		S[20] ^= tmp
-		tmp = bc[0] ^ (bc[2]<<1 | bc[2]>>(64-1))
-		S[1] ^= tmp
-		S[6] ^= tmp
-		S[11] ^= tmp
-		S[16] ^= tmp
-		S[21] ^= tmp
-		tmp = bc[1] ^ (bc[3]<<1 | bc[3]>>(64-1))
-		S[2] ^= tmp
-		S[7] ^= tmp
-		S[12] ^= tmp
-		S[17] ^= tmp
-		S[22] ^= tmp
-		tmp = bc[2] ^ (bc[4]<<1 | bc[4]>>(64-1))
-		S[3] ^= tmp
-		S[8] ^= tmp
-		S[13] ^= tmp
-		S[18] ^= tmp
-		S[23] ^= tmp
-		tmp = bc[3] ^ (bc[0]<<1 | bc[0]>>(64-1))
-		S[4] ^= tmp
-		S[9] ^= tmp
-		S[14] ^= tmp
-		S[19] ^= tmp
-		S[24] ^= tmp
+		bc0 = S0 ^ S5 ^ S10 ^ S15 ^ S20
+		bc1 = S1 ^ S6 ^ S11 ^ S16 ^ S21
+		bc2 = S2 ^ S7 ^ S12 ^ S17 ^ S22
+		bc3 = S3 ^ S8 ^ S13 ^ S18 ^ S23
+		bc4 = S4 ^ S9 ^ S14 ^ S19 ^ S24
+		tmp = bc4 ^ (bc1<<1 | bc1>>(64-1))
+		S0 ^= tmp
+		S5 ^= tmp
+		S10 ^= tmp
+		S15 ^= tmp
+		S20 ^= tmp
+		tmp = bc0 ^ (bc2<<1 | bc2>>(64-1))
+		S1 ^= tmp
+		S6 ^= tmp
+		S11 ^= tmp
+		S16 ^= tmp
+		S21 ^= tmp
+		tmp = bc1 ^ (bc3<<1 | bc3>>(64-1))
+		S2 ^= tmp
+		S7 ^= tmp
+		S12 ^= tmp
+		S17 ^= tmp
+		S22 ^= tmp
+		tmp = bc2 ^ (bc4<<1 | bc4>>(64-1))
+		S3 ^= tmp
+		S8 ^= tmp
+		S13 ^= tmp
+		S18 ^= tmp
+		S23 ^= tmp
+		tmp = bc3 ^ (bc0<<1 | bc0>>(64-1))
+		S4 ^= tmp
+		S9 ^= tmp
+		S14 ^= tmp
+		S19 ^= tmp
+		S24 ^= tmp
 
 		// rho phi
-		tmp = S[1]
-		tmp, S[10] = S[10], tmp<<1|tmp>>(64-1)
-		tmp, S[7] = S[7], tmp<<3|tmp>>(64-3)
-		tmp, S[11] = S[11], tmp<<6|tmp>>(64-6)
-		tmp, S[17] = S[17], tmp<<10|tmp>>(64-10)
-		tmp, S[18] = S[18], tmp<<15|tmp>>(64-15)
-		tmp, S[3] = S[3], tmp<<21|tmp>>(64-21)
-		tmp, S[5] = S[5], tmp<<28|tmp>>(64-28)
-		tmp, S[16] = S[16], tmp<<36|tmp>>(64-36)
-		tmp, S[8] = S[8], tmp<<45|tmp>>(64-45)
-		tmp, S[21] = S[21], tmp<<55|tmp>>(64-55)
-		tmp, S[24] = S[24], tmp<<2|tmp>>(64-2)
-		tmp, S[4] = S[4], tmp<<14|tmp>>(64-14)
-		tmp, S[15] = S[15], tmp<<27|tmp>>(64-27)
-		tmp, S[23] = S[23], tmp<<41|tmp>>(64-41)
-		tmp, S[19] = S[19], tmp<<56|tmp>>(64-56)
-		tmp, S[13] = S[13], tmp<<8|tmp>>(64-8)
-		tmp, S[12] = S[12], tmp<<25|tmp>>(64-25)
-		tmp, S[2] = S[2], tmp<<43|tmp>>(64-43)
-		tmp, S[20] = S[20], tmp<<62|tmp>>(64-62)
-		tmp, S[14] = S[14], tmp<<18|tmp>>(64-18)
-		tmp, S[22] = S[22], tmp<<39|tmp>>(64-39)
-		tmp, S[9] = S[9], tmp<<61|tmp>>(64-61)
-		tmp, S[6] = S[6], tmp<<20|tmp>>(64-20)
-		S[1] = tmp<<44 | tmp>>(64-44)
+		tmp = S1
+		tmp, S10 = S10, tmp<<1|tmp>>(64-1)
+		tmp, S7 = S7, tmp<<3|tmp>>(64-3)
+		tmp, S11 = S11, tmp<<6|tmp>>(64-6)
+		tmp, S17 = S17, tmp<<10|tmp>>(64-10)
+		tmp, S18 = S18, tmp<<15|tmp>>(64-15)
+		tmp, S3 = S3, tmp<<21|tmp>>(64-21)
+		tmp, S5 = S5, tmp<<28|tmp>>(64-28)
+		tmp, S16 = S16, tmp<<36|tmp>>(64-36)
+		tmp, S8 = S8, tmp<<45|tmp>>(64-45)
+		tmp, S21 = S21, tmp<<55|tmp>>(64-55)
+		tmp, S24 = S24, tmp<<2|tmp>>(64-2)
+		tmp, S4 = S4, tmp<<14|tmp>>(64-14)
+		tmp, S15 = S15, tmp<<27|tmp>>(64-27)
+		tmp, S23 = S23, tmp<<41|tmp>>(64-41)
+		tmp, S19 = S19, tmp<<56|tmp>>(64-56)
+		tmp, S13 = S13, tmp<<8|tmp>>(64-8)
+		tmp, S12 = S12, tmp<<25|tmp>>(64-25)
+		tmp, S2 = S2, tmp<<43|tmp>>(64-43)
+		tmp, S20 = S20, tmp<<62|tmp>>(64-62)
+		tmp, S14 = S14, tmp<<18|tmp>>(64-18)
+		tmp, S22 = S22, tmp<<39|tmp>>(64-39)
+		tmp, S9 = S9, tmp<<61|tmp>>(64-61)
+		tmp, S6 = S6, tmp<<20|tmp>>(64-20)
+		S1 = tmp<<44 | tmp>>(64-44)
 
 		// chi
-		bc[0] = S[0]
-		bc[1] = S[1]
-		bc[2] = S[2]
-		bc[3] = S[3]
-		bc[4] = S[4]
-		S[0] ^= (^bc[1]) & bc[2]
-		S[1] ^= (^bc[2]) & bc[3]
-		S[2] ^= (^bc[3]) & bc[4]
-		S[3] ^= (^bc[4]) & bc[0]
-		S[4] ^= (^bc[0]) & bc[1]
-		bc[0] = S[5]
-		bc[1] = S[6]
-		bc[2] = S[7]
-		bc[3] = S[8]
-		bc[4] = S[9]
-		S[5] ^= (^bc[1]) & bc[2]
-		S[6] ^= (^bc[2]) & bc[3]
-		S[7] ^= (^bc[3]) & bc[4]
-		S[8] ^= (^bc[4]) & bc[0]
-		S[9] ^= (^bc[0]) & bc[1]
-		bc[0] = S[10]
-		bc[1] = S[11]
-		bc[2] = S[12]
-		bc[3] = S[13]
-		bc[4] = S[14]
-		S[10] ^= (^bc[1]) & bc[2]
-		S[11] ^= (^bc[2]) & bc[3]
-		S[12] ^= (^bc[3]) & bc[4]
-		S[13] ^= (^bc[4]) & bc[0]
-		S[14] ^= (^bc[0]) & bc[1]
-		bc[0] = S[15]
-		bc[1] = S[16]
-		bc[2] = S[17]
-		bc[3] = S[18]
-		bc[4] = S[19]
-		S[15] ^= (^bc[1]) & bc[2]
-		S[16] ^= (^bc[2]) & bc[3]
-		S[17] ^= (^bc[3]) & bc[4]
-		S[18] ^= (^bc[4]) & bc[0]
-		S[19] ^= (^bc[0]) & bc[1]
-		bc[0] = S[20]
-		bc[1] = S[21]
-		bc[2] = S[22]
-		bc[3] = S[23]
-		bc[4] = S[24]
-		S[20] ^= (^bc[1]) & bc[2]
-		S[21] ^= (^bc[2]) & bc[3]
-		S[22] ^= (^bc[3]) & bc[4]
-		S[23] ^= (^bc[4]) & bc[0]
-		S[24] ^= (^bc[0]) & bc[1]
+		bc0 = S0
+		bc1 = S1
+		bc2 = S2
+		bc3 = S3
+		bc4 = S4
+		S0 ^= (^bc1) & bc2
+		S1 ^= (^bc2) & bc3
+		S2 ^= (^bc3) & bc4
+		S3 ^= (^bc4) & bc0
+		S4 ^= (^bc0) & bc1
+		bc0 = S5
+		bc1 = S6
+		bc2 = S7
+		bc3 = S8
+		bc4 = S9
+		S5 ^= (^bc1) & bc2
+		S6 ^= (^bc2) & bc3
+		S7 ^= (^bc3) & bc4
+		S8 ^= (^bc4) & bc0
+		S9 ^= (^bc0) & bc1
+		bc0 = S10
+		bc1 = S11
+		bc2 = S12
+		bc3 = S13
+		bc4 = S14
+		S10 ^= (^bc1) & bc2
+		S11 ^= (^bc2) & bc3
+		S12 ^= (^bc3) & bc4
+		S13 ^= (^bc4) & bc0
+		S14 ^= (^bc0) & bc1
+		bc0 = S15
+		bc1 = S16
+		bc2 = S17
+		bc3 = S18
+		bc4 = S19
+		S15 ^= (^bc1) & bc2
+		S16 ^= (^bc2) & bc3
+		S17 ^= (^bc3) & bc4
+		S18 ^= (^bc4) & bc0
+		S19 ^= (^bc0) & bc1
+		bc0 = S20
+		bc1 = S21
+		bc2 = S22
+		bc3 = S23
+		bc4 = S24
+		S20 ^= (^bc1) & bc2
+		S21 ^= (^bc2) & bc3
+		S22 ^= (^bc3) & bc4
+		S23 ^= (^bc4) & bc0
+		S24 ^= (^bc0) & bc1
 
 		// iota
-		S[0] ^= roundConstants[r]
+		S0 ^= roundConstants[r]
 	}
+
+	S[0], S[1], S[2], S[3], S[4] = S0, S1, S2, S3, S4
+	S[5], S[6], S[7], S[8], S[9] = S5, S6, S7, S8, S9
+	S[10], S[11], S[12], S[13], S[14] = S10, S11, S12, S13, S14
+	S[15], S[16], S[17], S[18], S[19] = S15, S16, S17, S18, S19
+	S[20], S[21], S[22], S[23], S[24] = S20, S21, S22, S23, S24
 }
 
 func uint64le(v []byte) uint64 {

@@ -252,6 +252,14 @@ func benchmarkHash(b *testing.B, h hash.Hash) {
 	}
 }
 
+func BenchmarkKeccakf(b *testing.B) {
+	var s [25]uint64
+	b.SetBytes(25 * 8)
+	for i := 0; i < b.N; i++ {
+		keccakf(&s)
+	}
+}
+
 func Benchmark224(b *testing.B)      { benchmarkHash(b, New224()) }
 func Benchmark256(b *testing.B)      { benchmarkHash(b, New256()) }
 func Benchmark384(b *testing.B)      { benchmarkHash(b, New384()) }

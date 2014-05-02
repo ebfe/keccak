@@ -170,7 +170,7 @@ func (k *keccak) squeeze(b []byte) []byte {
 
 func keccakf(S *[25]uint64) {
 	var bc [5]uint64
-	var tmp, tmp2 uint64
+	var tmp uint64
 
 	for r := 0; r < rounds; r++ {
 		// theta
@@ -212,75 +212,29 @@ func keccakf(S *[25]uint64) {
 
 		// rho phi
 		tmp = S[1]
-		tmp2 = S[10]
-		S[10] = rotl64(tmp, 1)
-		tmp = tmp2
-		tmp2 = S[7]
-		S[7] = rotl64(tmp, 3)
-		tmp = tmp2
-		tmp2 = S[11]
-		S[11] = rotl64(tmp, 6)
-		tmp = tmp2
-		tmp2 = S[17]
-		S[17] = rotl64(tmp, 10)
-		tmp = tmp2
-		tmp2 = S[18]
-		S[18] = rotl64(tmp, 15)
-		tmp = tmp2
-		tmp2 = S[3]
-		S[3] = rotl64(tmp, 21)
-		tmp = tmp2
-		tmp2 = S[5]
-		S[5] = rotl64(tmp, 28)
-		tmp = tmp2
-		tmp2 = S[16]
-		S[16] = rotl64(tmp, 36)
-		tmp = tmp2
-		tmp2 = S[8]
-		S[8] = rotl64(tmp, 45)
-		tmp = tmp2
-		tmp2 = S[21]
-		S[21] = rotl64(tmp, 55)
-		tmp = tmp2
-		tmp2 = S[24]
-		S[24] = rotl64(tmp, 2)
-		tmp = tmp2
-		tmp2 = S[4]
-		S[4] = rotl64(tmp, 14)
-		tmp = tmp2
-		tmp2 = S[15]
-		S[15] = rotl64(tmp, 27)
-		tmp = tmp2
-		tmp2 = S[23]
-		S[23] = rotl64(tmp, 41)
-		tmp = tmp2
-		tmp2 = S[19]
-		S[19] = rotl64(tmp, 56)
-		tmp = tmp2
-		tmp2 = S[13]
-		S[13] = rotl64(tmp, 8)
-		tmp = tmp2
-		tmp2 = S[12]
-		S[12] = rotl64(tmp, 25)
-		tmp = tmp2
-		tmp2 = S[2]
-		S[2] = rotl64(tmp, 43)
-		tmp = tmp2
-		tmp2 = S[20]
-		S[20] = rotl64(tmp, 62)
-		tmp = tmp2
-		tmp2 = S[14]
-		S[14] = rotl64(tmp, 18)
-		tmp = tmp2
-		tmp2 = S[22]
-		S[22] = rotl64(tmp, 39)
-		tmp = tmp2
-		tmp2 = S[9]
-		S[9] = rotl64(tmp, 61)
-		tmp = tmp2
-		tmp2 = S[6]
-		S[6] = rotl64(tmp, 20)
-		tmp = tmp2
+		tmp, S[10] = S[10], rotl64(tmp, 1)
+		tmp, S[7] = S[7], rotl64(tmp, 3)
+		tmp, S[11] = S[11], rotl64(tmp, 6)
+		tmp, S[17] = S[17], rotl64(tmp, 10)
+		tmp, S[18] = S[18], rotl64(tmp, 15)
+		tmp, S[3] = S[3], rotl64(tmp, 21)
+		tmp, S[5] = S[5], rotl64(tmp, 28)
+		tmp, S[16] = S[16], rotl64(tmp, 36)
+		tmp, S[8] = S[8], rotl64(tmp, 45)
+		tmp, S[21] = S[21], rotl64(tmp, 55)
+		tmp, S[24] = S[24], rotl64(tmp, 2)
+		tmp, S[4] = S[4], rotl64(tmp, 14)
+		tmp, S[15] = S[15], rotl64(tmp, 27)
+		tmp, S[23] = S[23], rotl64(tmp, 41)
+		tmp, S[19] = S[19], rotl64(tmp, 56)
+		tmp, S[13] = S[13], rotl64(tmp, 8)
+		tmp, S[12] = S[12], rotl64(tmp, 25)
+		tmp, S[2] = S[2], rotl64(tmp, 43)
+		tmp, S[20] = S[20], rotl64(tmp, 62)
+		tmp, S[14] = S[14], rotl64(tmp, 18)
+		tmp, S[22] = S[22], rotl64(tmp, 39)
+		tmp, S[9] = S[9], rotl64(tmp, 61)
+		tmp, S[6] = S[6], rotl64(tmp, 20)
 		S[1] = rotl64(tmp, 44)
 
 		// chi

@@ -185,7 +185,7 @@ func keccakf(S *[25]uint64) {
 		S[10] ^= tmp
 		S[15] ^= tmp
 		S[20] ^= tmp
-		tmp = bc[0] ^(bc[2]<<1 | bc[2]>>(64-1))
+		tmp = bc[0] ^ (bc[2]<<1 | bc[2]>>(64-1))
 		S[1] ^= tmp
 		S[6] ^= tmp
 		S[11] ^= tmp
@@ -197,7 +197,7 @@ func keccakf(S *[25]uint64) {
 		S[12] ^= tmp
 		S[17] ^= tmp
 		S[22] ^= tmp
-		tmp = bc[2] ^  (bc[4]<<1 | bc[4]>>(64-1))
+		tmp = bc[2] ^ (bc[4]<<1 | bc[4]>>(64-1))
 		S[3] ^= tmp
 		S[8] ^= tmp
 		S[13] ^= tmp
@@ -212,30 +212,30 @@ func keccakf(S *[25]uint64) {
 
 		// rho phi
 		tmp = S[1]
-		tmp, S[10] = S[10], tmp << 1 | tmp >> (64- 1)
-		tmp, S[7] = S[7],   tmp << 3 | tmp >> (64- 3)
-		tmp, S[11] = S[11], tmp << 6 | tmp >> (64- 6)
-		tmp, S[17] = S[17], tmp << 10 | tmp >> (64- 10)
-		tmp, S[18] = S[18], tmp << 15 | tmp >> (64- 15)
-		tmp, S[3] = S[3],   tmp << 21 | tmp >> (64- 21)
-		tmp, S[5] = S[5],   tmp << 28 | tmp >> (64- 28)
-		tmp, S[16] = S[16], tmp << 36 | tmp >> (64- 36)
-		tmp, S[8] = S[8],   tmp << 45 | tmp >> (64- 45)
-		tmp, S[21] = S[21], tmp << 55 | tmp >> (64- 55)
-		tmp, S[24] = S[24], tmp << 2 | tmp >> (64- 2)
-		tmp, S[4] = S[4],   tmp << 14 | tmp >> (64- 14)
-		tmp, S[15] = S[15], tmp << 27 | tmp >> (64- 27)
-		tmp, S[23] = S[23], tmp << 41 | tmp >> (64- 41)
-		tmp, S[19] = S[19], tmp << 56 | tmp >> (64- 56)
-		tmp, S[13] = S[13], tmp << 8 | tmp >> (64- 8)
-		tmp, S[12] = S[12], tmp << 25 | tmp >> (64- 25)
-		tmp, S[2] = S[2],   tmp << 43 | tmp >> (64- 43)
-		tmp, S[20] = S[20], tmp << 62 | tmp >> (64- 62)
-		tmp, S[14] = S[14], tmp << 18 | tmp >> (64- 18)
-		tmp, S[22] = S[22], tmp << 39 | tmp >> (64- 39)
-		tmp, S[9] = S[9],   tmp << 61 | tmp >> (64- 61)
-		tmp, S[6] = S[6],   tmp << 20 | tmp >> (64- 20)
-		S[1] =              tmp << 44 | tmp >> (64- 44)
+		tmp, S[10] = S[10], tmp<<1|tmp>>(64-1)
+		tmp, S[7] = S[7], tmp<<3|tmp>>(64-3)
+		tmp, S[11] = S[11], tmp<<6|tmp>>(64-6)
+		tmp, S[17] = S[17], tmp<<10|tmp>>(64-10)
+		tmp, S[18] = S[18], tmp<<15|tmp>>(64-15)
+		tmp, S[3] = S[3], tmp<<21|tmp>>(64-21)
+		tmp, S[5] = S[5], tmp<<28|tmp>>(64-28)
+		tmp, S[16] = S[16], tmp<<36|tmp>>(64-36)
+		tmp, S[8] = S[8], tmp<<45|tmp>>(64-45)
+		tmp, S[21] = S[21], tmp<<55|tmp>>(64-55)
+		tmp, S[24] = S[24], tmp<<2|tmp>>(64-2)
+		tmp, S[4] = S[4], tmp<<14|tmp>>(64-14)
+		tmp, S[15] = S[15], tmp<<27|tmp>>(64-27)
+		tmp, S[23] = S[23], tmp<<41|tmp>>(64-41)
+		tmp, S[19] = S[19], tmp<<56|tmp>>(64-56)
+		tmp, S[13] = S[13], tmp<<8|tmp>>(64-8)
+		tmp, S[12] = S[12], tmp<<25|tmp>>(64-25)
+		tmp, S[2] = S[2], tmp<<43|tmp>>(64-43)
+		tmp, S[20] = S[20], tmp<<62|tmp>>(64-62)
+		tmp, S[14] = S[14], tmp<<18|tmp>>(64-18)
+		tmp, S[22] = S[22], tmp<<39|tmp>>(64-39)
+		tmp, S[9] = S[9], tmp<<61|tmp>>(64-61)
+		tmp, S[6] = S[6], tmp<<20|tmp>>(64-20)
+		S[1] = tmp<<44 | tmp>>(64-44)
 
 		// chi
 		bc[0] = S[0]
